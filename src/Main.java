@@ -12,7 +12,7 @@ void main() {
 //        sb.append("let a").append(i).append(" = ").append(i).append(';');
 //    }
 
-    Lexer lexer = new Lexer("let a: float = 12 * 11 + 3;");
+    Lexer lexer = new Lexer("let a: str = \"Hello \" + \"world!\";");
     long t0 = System.nanoTime();
     Parser parser = new Parser(lexer.lex(), lexer.idx);
     Block g = parser.parse();

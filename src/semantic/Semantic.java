@@ -38,9 +38,9 @@ public final class Semantic {
             ErrorEngine.addWithValue("Addition Error: Cannot add String value `%s` with %s value `%s`.",
                     l.line, l.startIdx, r.endIdx,
                     (lt == BuiltinType.String) ?
-                            ErrorEngine.source.substring(l.startIdx, l.endIdx)
+                            ErrorEngine.source.substring(l.startIdx+1, l.endIdx-1)
                             :
-                            ErrorEngine.source.substring(r.startIdx, r.endIdx),
+                            ErrorEngine.source.substring(r.startIdx+1, r.endIdx-1),
                     (lt == BuiltinType.String) ? rt : lt,
                     (lt == BuiltinType.String) ?
                             ErrorEngine.source.substring(r.startIdx, r.endIdx)
@@ -64,14 +64,14 @@ public final class Semantic {
         if (lt == BuiltinType.String && rt == BuiltinType.String) {
             ErrorEngine.addWithValue("Substraction Error: Cannot subtract two String values `%s` and `%s`.",
                     l.line, l.startIdx, r.endIdx,
-                    ErrorEngine.source.substring(l.startIdx, l.endIdx),
-                    ErrorEngine.source.substring(r.startIdx, r.endIdx)
+                    ErrorEngine.source.substring(l.startIdx+1, l.endIdx-1),
+                    ErrorEngine.source.substring(r.startIdx+1, r.endIdx-1)
             );
         }
         if (lt == BuiltinType.String) {
             ErrorEngine.addWithValue("Substraction Error: Cannot subtract a String value `%s` with right operand %s value `%s`.",
                     l.line, l.startIdx, r.endIdx,
-                    ErrorEngine.source.substring(l.startIdx, l.endIdx),
+                    ErrorEngine.source.substring(l.startIdx+1, l.endIdx-1),
                     rt,
                     ErrorEngine.source.substring(r.startIdx, r.endIdx)
             );
@@ -80,9 +80,9 @@ public final class Semantic {
         if (rt == BuiltinType.String) {
             ErrorEngine.addWithValue("Substraction Error: Cannot do subtraction with right operand String value `%s` with left operand %s value `%s`.",
                     l.line, l.startIdx, r.endIdx,
-                    ErrorEngine.source.substring(r.startIdx, r.endIdx),
+                    ErrorEngine.source.substring(r.startIdx+1, r.endIdx-1),
                     lt,
-                    ErrorEngine.source.substring(r.startIdx, r.endIdx)
+                    ErrorEngine.source.substring(l.startIdx, l.endIdx)
             );
             return;
         }
@@ -103,14 +103,14 @@ public final class Semantic {
         if (lt == BuiltinType.String && rt == BuiltinType.String) {
             ErrorEngine.addWithValue("Substraction Error: Cannot multiply two String values `%s` and `%s`.",
                     l.line, l.startIdx, r.endIdx,
-                    ErrorEngine.source.substring(l.startIdx, l.endIdx),
-                    ErrorEngine.source.substring(r.startIdx, r.endIdx)
+                    ErrorEngine.source.substring(l.startIdx+1, l.endIdx-1),
+                    ErrorEngine.source.substring(r.startIdx+1, r.endIdx-1)
             );
         }
         if (lt == BuiltinType.String) {
             ErrorEngine.addWithValue("Substraction Error: Cannot multiply a String value `%s` with right operand %s value `%s`.",
                     l.line, l.startIdx, r.endIdx,
-                    ErrorEngine.source.substring(l.startIdx, l.endIdx),
+                    ErrorEngine.source.substring(l.startIdx+1, l.endIdx-1),
                     rt,
                     ErrorEngine.source.substring(r.startIdx, r.endIdx)
             );
@@ -119,9 +119,9 @@ public final class Semantic {
         if (rt == BuiltinType.String) {
             ErrorEngine.addWithValue("Substraction Error: Cannot do multiplication with right operand String value `%s` with left operand %s value `%s`.",
                     l.line, l.startIdx, r.endIdx,
-                    ErrorEngine.source.substring(r.startIdx, r.endIdx),
+                    ErrorEngine.source.substring(r.startIdx+1, r.endIdx-1),
                     lt,
-                    ErrorEngine.source.substring(r.startIdx, r.endIdx)
+                    ErrorEngine.source.substring(l.startIdx, l.endIdx)
             );
             return;
         }
@@ -142,14 +142,14 @@ public final class Semantic {
         if (lt == BuiltinType.String && rt == BuiltinType.String) {
             ErrorEngine.addWithValue("Substraction Error: Cannot divide two String values `%s` and `%s`.",
                     l.line, l.startIdx, r.endIdx,
-                    ErrorEngine.source.substring(l.startIdx, l.endIdx),
-                    ErrorEngine.source.substring(r.startIdx, r.endIdx)
+                    ErrorEngine.source.substring(l.startIdx+1, l.endIdx-1),
+                    ErrorEngine.source.substring(r.startIdx+1, r.endIdx-1)
             );
         }
         if (lt == BuiltinType.String) {
             ErrorEngine.addWithValue("Substraction Error: Cannot divide a String value `%s` with right operand %s value `%s`.",
                     l.line, l.startIdx, r.endIdx,
-                    ErrorEngine.source.substring(l.startIdx, l.endIdx),
+                    ErrorEngine.source.substring(l.startIdx+1, l.endIdx-1),
                     rt,
                     ErrorEngine.source.substring(r.startIdx, r.endIdx)
             );
@@ -158,9 +158,9 @@ public final class Semantic {
         if (rt == BuiltinType.String) {
             ErrorEngine.addWithValue("Substraction Error: Cannot do division with right operand String value `%s` with left operand %s value `%s`.",
                     l.line, l.startIdx, r.endIdx,
-                    ErrorEngine.source.substring(r.startIdx, r.endIdx),
+                    ErrorEngine.source.substring(r.startIdx+1, r.endIdx-1),
                     lt,
-                    ErrorEngine.source.substring(r.startIdx, r.endIdx)
+                    ErrorEngine.source.substring(l.startIdx, l.endIdx)
             );
             return;
         }
