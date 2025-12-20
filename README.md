@@ -10,96 +10,98 @@ The project is developed entirely in **Java**, with the
 explicit goal of being ***understandable***, ***extensible***, 
 and ***maintainable*** **over time**.
 
-This repository documents the design decisions, internal architecture, and theoretical foundations of the Xyn compiler.
+This repository documents the **design decisions**, 
+**internal architecture**, and **theoretical foundations** of the 
+Xyn compiler.
 
-> Xyn is not designed to compete with mainstream languages. It is a learning-driven, research-oriented project that prioritizes understanding how compilers really work.
+> Xyn is **not designed to compete** with mainstream languages. 
+> It is a **learning-driven** and **research-oriented project** 
+> that prioritizes understanding how compilers really work.
+
+
+
+
+---
+
+## Project Goals
+####
+- **Design and implement** a full compiler pipeline **from scratch**.
+
+
+- **Prioritize imperative semantics** and **explicit control flow**.
+
+
+- Keep abstractions **minimal and understandable**.
+
+
+- Avoid unnecessary **magic or hidden behavior**.
+
+
+- **Learn and apply** real-world compiler techniques 
+(used in **LLVM**, **JVM**, and modern **PLs**)
+
+
+---
+
+## Language Philosophy
+####
+**Xyn is intentionally designed around these principles**:
+
+1. **Imperative-first**: You **explicitly describe** ***how*** 
+things happen, not just ***what*** happens.
+
+2. **Predictable semantics**: Language behavior should be 
+**obvious** from reading the code.
+
+3. **Minimal core**: The language starts small and grows 
+deliberately.
+
+4. **Bootstrappable**: Even fundamental concepts (like strings) 
+are not assumed ***magically***.
+
+**The language intentionally avoids overly abstract or 
+purely functional paradigms, favoring transparency and control**.
+
+
+---
+
+## Implementation Language
+
+**Xyn made from purely all Java ecosystem and tooling**. 
+
+### Java was chosen because:
+
+1. **Strong tooling** and **debuggability**.
+
+2. **Explicit memory** and **object model**.
+
+3. **Easier long-term maintenance**.
+
+4. **Better alignment** with **imperative reasoning**.
 
 
 
 
 ---
 
-Project Goals
+### Compiler Architecture Overview
 
-Design and implement a full compiler pipeline from scratch
+**The Xyn compiler follows a traditional but 
+carefully designed pipeline**:
 
-Prioritize imperative semantics and explicit control flow
+> **Source Code** → **Lexer** (Lexical Analysis) → **Parser** 
+> (Syntax Analysis) → **AST** (Abstract Syntax Tree) 
+> → **Type Checker** (Semantic Analysis) → **IR** 
+> (Intermediate Representation with Three-Address Code) 
+> → **SSA Transformation** → **Optimizations**
+> → **Backend** / **Code Generation** (planned).
 
-Keep abstractions minimal and understandable
-
-Avoid unnecessary magic or hidden behavior
-
-Learn and apply real-world compiler techniques (used in LLVM, JVM, modern PLs)
-
-
-
----
-
-Language Philosophy
-
-Xyn is intentionally designed around these principles:
-
-Imperative-first: You explicitly describe how things happen, not just what happens
-
-Predictable semantics: Language behavior should be obvious from reading the code
-
-Minimal core: The language starts small and grows deliberately
-
-Bootstrappable: Even fundamental concepts (like strings) are not assumed magically
-
-
-The language intentionally avoids overly abstract or purely functional paradigms, favoring transparency and control.
+**Each stage is intentionally isolated and inspectable**.
 
 
 ---
 
-Implementation Language
-
-Java (only)
-
-
-Java was chosen because:
-
-Strong tooling and debuggability
-
-Explicit memory and object model
-
-Easier long-term maintenance
-
-Better alignment with imperative reasoning
-
-
-No Python or Rust prototyping is used. All experiments are done directly in Java.
-
-
----
-
-Compiler Architecture Overview
-
-The Xyn compiler follows a traditional but carefully designed pipeline:
-
-Source Code
-↓
-Lexer
-↓
-Parser
-↓
-AST
-↓
-IR (Three-Address Code)
-↓
-SSA Transformation
-↓
-Optimizations
-↓
-Backend / Code Generation (planned)
-
-Each stage is intentionally isolated and inspectable.
-
-
----
-
-Lexical Analysis (Lexer)
+## Lexical Analysis (aka Lexer)
 
 Tokens store source indices (start & end) instead of copied strings
 
