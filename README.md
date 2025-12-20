@@ -242,27 +242,43 @@ carefully designed pipeline**:
 
 **The goal is for error messages to teach, not merely report failure**.
 
+---
+
+### What are done for now:
+
+#### Fitures:
+**[version 0.01]**
+- **Basic variable declaration**.
+- **Variable declaration supports static typing and type inference**.
+- **Supports three types** (i.e, String, Integer, Float)
+
+#### Technical:
+**[version 0.01]**
+- **Lexer**, supports assignment operator (e.g., ident, equal sign, let keyword, etc.), three values (i.e, int, float, string), and operation operators.
+- **Parser**, supports basic declarations and error recovery with maximum lookahead are 5.
+- **Semantic**, have a type checking task that check expression type and compare it with it's declared type (if declared).
+- **HIR (High IR) generator**, can generate basic declarations IR based on three adress code, do type conversion, and do optimization to the generated IR.
+- **HIR Pass** (subset of IR generator), do optimization on the generated IR for multiple pass.
+- **Error Engine**, stores all error. When reporting, it seperates all the errors line by line orderly from least to greatest, and display the errors with pretty output.
 
 ---
 
 ### Planned & Ongoing Work
 
-- **Basic Control Flow** (e.g., if and while statement)
+> Disclaimer: **Fiture or technical stuff maybe appear not as the expected version**.
 
-- **Futher optimization** on the IR.
+#### Fiture:
+**[for version 0.04]**
+- **Simpel control flow statement** (e.g., if and else statement).
 
-- **Dead code elimination**.
+#### Technical:
+**[for version 0.02]**
+- **Completing the IR Pass and makes the optimization works**.
+- **Make a LIR (Low IR) Generator that generate VM-ready instruction from the HIR**.
 
-- **Constant folding** & **propagation**.
-
-- **Backend design** (bytecode or native).
-
-- **Runtime model**.
-
-- **Garbage collection strategy**.
-
-- **Self-hosting** experiments (long-term).
-
+**[for version 0.03]**
+- **Make a LIR storer that will stored the LIR code into a .xir file**
+- **Make a VM that used the LIR and execute it**.
 ---
 
 ## Inspirations & References
