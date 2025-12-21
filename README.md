@@ -39,6 +39,26 @@ Xyn compiler.
 - For that problem, Xyn then use the same idea from **C# nullability**. On default, types cannot be nullable.\
   But with "**?**" **operator**, it states that the types **can be nullable**.
 
+### Examples:
+```rs
+
+let age: int = 12;
+// this is not allowed because `age` is not nullable
+age = null;
+
+// but this is allowed
+let name: str? = "John";
+name = null;
+
+let johnMoney: float = 200f;
+let bank: List<float> = new List<float>();
+// this is allowed because `bank` is a list of not nullable float
+bank.add(johnMoney);
+// so you can't write this
+bank.add(null);
+
+
+```
 
 ### Type Inference and Static Typing
 
