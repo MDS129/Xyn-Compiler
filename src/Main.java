@@ -1,4 +1,5 @@
 import HIRs.HIRGen;
+import HIRs.HIRPass;
 import LIRs.LIRGen;
 import lexer.Lexer;
 import parser.Ast.statements.Block;
@@ -22,10 +23,13 @@ void main() {
     new Semantic(g, parser.idx).check();
 
     HIRGen hirGenerator = new HIRGen(g.statements, parser.idx);
-    String s = hirGenerator.generate();
+
+    HIRPass hirPass = new HIRPass(hirGenerator.generate().toCharArray());
+    String s = hirPass.optimize();
     IO.println(s);
 
-    LIRGen lirGenerator = new LIRGen(s);
+    LIRGen lirGenerator = new LIRGen(hirPass.var);
+    IO.println(lirGenerator.generate());
     long t1 = System.nanoTime();
 
     System.out.println((t1 - t0) / 1_000_000 + " ms");

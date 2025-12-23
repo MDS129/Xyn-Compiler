@@ -6,7 +6,10 @@ import parser.Ast.AstNode;
 import parser.Ast.exprs.BinaryExpr;
 import parser.Ast.exprs.Expr;
 import parser.Ast.exprs.UnaryExpr;
+import parser.Ast.exprs.literals.VarRef;
 import parser.Ast.statements.decls.VarDecl;
+import symboltables.SymbolType;
+import symboltables.Variable;
 
 
 import java.util.HashMap;
@@ -43,12 +46,12 @@ public final class HIRGen {
 
         if (isLeftOrRightInteger(reg.get(left), reg.get(right))) {
             // example: t1 = itof t0
-            sb.append('t').append(counter++).append(" = itof t").append((reg.get(left) == BuiltinType.Integer) ? left : right).append('\n');
+            sb.append('t').append(counter++).append(" = i t").append((reg.get(left) == BuiltinType.Integer) ? left : right).append('\n');
             // if example == "t1 = itof t0" where left is Integer. left = counter - 1 (example: 1)
             if (reg.get(left) == BuiltinType.Integer) {
                 left = counter-1;
             } else {
-                right = counter-1;
+                right = counter - 1;
             }
             reg.put(counter, BuiltinType.Float);
         } else {
@@ -82,40 +85,46 @@ public final class HIRGen {
          if (value instanceof Expr e) {
             reg.put(counter, e.type);
             // example: t0 = const 12
-            sb.append('t').append(counter++).append(" = const ").append(source, value.startIdx, value.endIdx).append('\n');
+            sb.append('t').append(counter++).append(" = const i ").append(source, value.startIdx, value.endIdx).append('\n');
             return;
         }
         throw new Error("Unknown value type");
     }
 
-    private boolean isNotInferredAndVarRefAnd(BuiltinType type, BuiltinType notType) {
+    private boolean isNotInferredAndVarRefAndNot(BuiltinType type, BuiltinType notType) {
         return type != BuiltinType.Inferred && notType != BuiltinType.VarRef && type != notType;
     }
 
-    private void handleVarTypeNotTyped(BuiltinType type, int regIdx) {
+    private BuiltinType handleVarTypeNotTyped(BuiltinType type, int regIdx) {
         sb.append('t').append(counter++).append(" = ").append(
                 switch (reg.get(regIdx)) {
-                    case Integer -> "ito";
-                    case Float -> "fto";
-                    default ->  throw new Error("WTH");
-                }
-        ).append(
-                switch (type) {
                     case Integer -> "i";
                     case Float -> "f";
                     default ->  throw new Error("WTH");
                 }
         ).append(" t").append(regIdx).append('\n');
+        return reg.get(regIdx);
     }
+
+    private char byType(BuiltinType t) {
+        return switch (t) {
+            case Integer -> 'i';
+            case Float -> 'f';
+            case String -> 's';
+            default -> throw new Error("Unknown type");
+        };
+    }
+
 
     private void generateDecl(VarDecl var) {
         evalExpr(var.value);
         int v = counter-1;
 
-        if (isNotInferredAndVarRefAnd(var.varType, reg.get(v))) {
-            handleVarTypeNotTyped(var.varType, v);
+        BuiltinType type = reg.get(v);
+        if (isNotInferredAndVarRefAndNot(var.varType, reg.get(v))) {
+            type = handleVarTypeNotTyped(var.varType, v);
         }
-        sb.append("store ").append(source, var.startIdx, var.endIdx).append(' ').append('t').append(counter-1).append('\n');
+        sb.append("store ").append(source, var.startIdx, var.endIdx).append(' ').append(byType(type)).append(" t").append(counter-1).append('\n');
     }
 
     public String generate() {
@@ -130,6 +139,6 @@ public final class HIRGen {
             }
         }
         IO.println("\n- zero pass:\n" + sb);
-        return new HIRPass(sb.toString().toCharArray()).optimize();
+        return sb.toString();
     }
 }

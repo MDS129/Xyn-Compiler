@@ -1,5 +1,8 @@
 package HIRs;
 
+import LIRs.VarDesc;
+import builtins.BuiltinType;
+
 import java.util.HashMap;
 
 /// optimization class for IR
@@ -17,8 +20,8 @@ public final class HIRPass {
     private char[] chars;
 
 
-    private final HashMap<Integer, String> reg = new HashMap<>();
-    private final HashMap<String, String> var = new HashMap<>();
+    private final HashMap<Integer, VarDesc> reg = new HashMap<>();
+    public final HashMap<String, VarDesc> var = new HashMap<>();
 
     public HIRPass(char[] c) {
         chars = c;
@@ -45,6 +48,15 @@ public final class HIRPass {
         }
     }
 
+    private char byType(BuiltinType t) {
+        return switch (t) {
+            case Integer -> 'i';
+            case Float -> 'f';
+            case String -> 's';
+            default -> throw new Error("Unknown type");
+        };
+    }
+
     private int getFirstArg(int i) {
         afterOperation = true;
         // skip the "add "
@@ -62,6 +74,7 @@ public final class HIRPass {
         }
         skipIdx(1); // skip the space between first arg and second arg
         reset(other);
+        sb.append(byType(reg.get(v0).type)).append(' ');
         return v0;
     }
 
@@ -75,8 +88,8 @@ public final class HIRPass {
 
         // the first argument is temp var
         if (v0 >= 0) {
-            final String left = reg.get(v0);
-            final String right = reg.get(Integer.parseInt(other.toString()));
+            final String left = reg.get(v0).value;
+            final String right = reg.get(Integer.parseInt(other.toString())).value;
             final String value = String.valueOf(
                     switch (op) {
                         case 0 -> Integer.parseInt(left) + Integer.parseInt(right);
@@ -87,9 +100,18 @@ public final class HIRPass {
                     }
             );
 
-            reg.put(index, value);
+            reg.put(index, new VarDesc(reg.get(v0).type, value));
             sb.append(value).append('\n');
         }
+    }
+
+    private BuiltinType getType() {
+        return switch (chars[idx]) {
+            case 'i' -> BuiltinType.Integer;
+            case 'f' -> BuiltinType.Float;
+            case 's' -> BuiltinType.String;
+            default -> throw new Error("Unknown Type");
+        };
     }
 
     private void handleTempVarValue(int index) {
@@ -98,15 +120,17 @@ public final class HIRPass {
             case 'c':
                 // skipping "const "
                 skipIdx(6);
+                BuiltinType type = getType();
+                skipIdx(2);
                 if (chars[idx] == '-') {
                     other.append(chars[idx++]);
                 }
                 if (isDigit(chars[idx])) {
                     gatherIndex();
-                    reg.put(index, other.toString());
+                    reg.put(index, new VarDesc(type, other.toString()));
                 } else { // var
                     gatherUntil('\n');
-                    reg.put(index, var.get(other.toString()));
+                    reg.put(index, new VarDesc(type, var.get(other.toString()).value));
                 }
                 break;
 
@@ -160,37 +184,43 @@ public final class HIRPass {
         other.append("store ");
         // skipping the varName
         gatherUntil(' ');
+        other.append(chars[idx++]);
+        other.append(chars[idx++]);
 
         final String st = other.toString();
-        reset(other);
 
-        // skipping the space between variable name and value
+        // skipping the space between value type and value
         skipIdx(1);
+
+        reset(other);
         // skip
         if (isDigit(chars[idx])) {
             gatherUntil('\n');
+            reset(other);
             skipIdx(1);
             return;
         }
+        final String key = st.substring(6, st.length() - 2);
         if (chars[idx] == 't') {
             skipIdx(1); // skipping the t
+
             gatherIndex();
             final int right = Integer.parseInt(other.toString());
 
             if (afterOperation) {
                 sb.append(st).append(' ').append('t').append(right).append('\n');
             } else {
-                sb.append(st).append(' ').append(reg.get(right)).append('\n');
+                sb.append(st).append(' ').append(reg.get(right).value).append('\n');
             }
             // skip the "store "
-            var.put(st.substring(6), reg.get(right));
+            var.put(key, new VarDesc(reg.get(right).type, reg.get(right).value));
         } else {
             gatherUntil('\n');
 
             final String right = other.toString();
-            sb.append(st).append(' ').append(var.get(right)).append('\n');
+            sb.append(st).append(' ').append(var.get(right).value).append('\n');
             // skip the "store "
-            var.put(st.substring(6), var.get(right));
+            var.put(key, var.get(right));
         }
         skipIdx(1); // skipping the new line
         reset(other);

@@ -1,72 +1,39 @@
 package LIRs;
 
+import builtins.BuiltinType;
+
 import java.util.HashMap;
+import java.util.List;
 
 public final class LIRGen {
-    private final char[] source;
+
     private final StringBuilder sb = new StringBuilder();
     private final StringBuilder other = new StringBuilder();
 
     private final HashMap<String, VarDesc> variable = new HashMap<>();
+    private final HashMap<String, VarDesc> prevVars;
 
-    private int idx = 0;
-    public LIRGen(String s) {
-        source = s.toCharArray();
+    public LIRGen(HashMap<String, VarDesc> var) {
+         prevVars = var;
     }
 
-    private void skip(int i) {
-        idx += i;
+    private char byType(BuiltinType t) {
+        return switch (t) {
+            case Integer -> 'i';
+            case Float -> 'f';
+            case String -> 's';
+            default -> throw new Error("Unknown type");
+        };
     }
 
-    private void reset(StringBuilder s) {
-        s.setLength(0);
-    }
-
-    private void skipUntil(char c) {
-        while (source[idx] != c) {
-            other.append(source[idx++]);
+    public String generate() {
+        List<String> keys = prevVars.keySet().stream().toList();
+        for (String k : keys) {
+            VarDesc varDesc = prevVars.get(k);
+            char c = byType(varDesc.type);
+            sb.append("push_").append(c).append(' ').append(varDesc.value).append('\n');
+            sb.append("store_").append(c).append(' ').append(k).append('\n');
         }
-    }
-
-    private String skipUntilThenGet(char c) {
-        skipUntil(c);
-        final String f = other.toString();
-        reset(other);
-        return f;
-    }
-
-    private boolean isDigit(char c) {
-    }
-
-    private VarDesc getDigitOrFloat() {
-
-    }
-
-    private VarDesc getValue() {
-        if (isDigit(source[idx])) {
-            return getDigitOrFloat();
-        }
-        throw new Error("Unknown value");
-    }
-
-
-
-
-    public void generate() {
-        while (idx < source.length) {
-            switch (source[idx]) {
-                // for store
-                case 's':
-                    // skip "store "
-                    skip(6);
-                    String varName = skipUntilThenGet(' ');
-                    skip(1); // skip the space between varName and value
-                    VarDesc value = getValue();
-                    skip(1); // skip the newline;
-
-                    // variable.put(varName, value);
-
-            }
-        }
+        return sb.toString();
     }
 }
