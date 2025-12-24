@@ -290,6 +290,7 @@ carefully designed pipeline**:
 
 #### Feature:
 **[for version 0.05]**
+- **Dynamic Variable**.
 - **Simple control flow statement** (e.g., if and else statement). [ ]
 
 #### Technical:
