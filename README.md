@@ -1,7 +1,12 @@
 
 # Xyn Compiler
 
-## Introduction
+## Chapters
+
+1. [Overview](overview)
+2. [Variables](variables)
+
+## Overview
 
 Xyn is an **experimental**, **self-designed programming language**
 and compiler project focused on ***clarity***, ***control***,
@@ -20,45 +25,34 @@ Xyn compiler.
 > It is a **learning-driven** and **research-oriented project**
 > that prioritizes understanding how compilers really work.
 
-## Preview
+## Variables
 
+### Sections:
+- [Basic Types in Xyn](basic-types)
+- [Example 0](example-0)
+- [Nullability](nullability)
+- [Static or Dynamic?](static--dynamic-variable-in-xyn)
+  
 ### Basic Types
 
-#### There are **5 basic types** in Xyn, and **2 condition** that can be applied to all type.
-
+#### There are **5 built-in basic types** in Xyn.
 - The **five basic types** in Xyn are **str** (string), **int** (integer), **float** (decimal numbers), **char** (character), and **bool** (boolean).\
-  These types on **default** cannot be a **null**. But, **what is a** ***null***?
+  Every types on **default** are not **nullable**, so you can't assign it with null value.
 
-- A **null** is a condition where in case of variable, that variable **holds a state** where it's value was **nothing or void**.\
-  But on case of **literal values**, **null** means a value of **nothing or void** that have **no real meaning**.\
-  You **can't do operation** with it **nor use it in your program**.
-
-- So to prevent that, Xyn's **on default not allowed** a value to be a **nullable**.\
-  But at some point, void can show up from **hardware** or **program's** state randomly. Making a value **must be a nullable** to accept that void.
-
-- For that problem, Xyn then use the same idea from **C# nullability**. On default, types cannot be nullable.\
-  But with "**?**" **operator**, it states that the types **can be nullable**.
-
-### Examples:
+### Example 0:
 ```rs
 
 let age: int = 12;
 // this is not allowed because `age` is not nullable
 age = null;
 
-// but this is allowed
-let name: str? = "John";
-name = null;
-
-let johnMoney: float = 200f;
-let bank: List<float> = new List<float>();
-// this is allowed because `bank` is a list of not nullable float
-bank.add(johnMoney);
-// so you can't write this
-bank.add(null);
-
+dyn name = age;
+name = null; // another error
 
 ```
+
+### Nullability
+
 
 ### Type Inference and Static Typing
 
