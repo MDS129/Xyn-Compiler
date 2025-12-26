@@ -1,14 +1,13 @@
 package HIRs;
 
-import LIRs.VarDesc;
 import builtins.BuiltinType;
 import errors.ErrorEngine;
 import parser.Ast.AstNode;
 import parser.Ast.exprs.BinaryExpr;
 import parser.Ast.exprs.Expr;
 import parser.Ast.exprs.UnaryExpr;
-import parser.Ast.exprs.literals.VarRef;
 import parser.Ast.statements.decls.VarDecl;
+import symboltables.Symbol;
 import symboltables.SymbolType;
 import symboltables.Variable;
 
@@ -23,11 +22,12 @@ public final class HIRGen {
     private final String source = ErrorEngine.source;
 
     private final AstNode[] statements;
+    private final HashMap<SymbolType, HashMap<String, Symbol>> symbolTable;
     private final int length;
     private int counter = 0;
-    public HIRGen(AstNode[] s, int l) {
+    public HIRGen(AstNode[] s, HashMap<SymbolType, HashMap<String, Symbol>> sy, int l) {
         statements = s;
-
+        symbolTable = sy;
         length = l;
     }
 
@@ -128,8 +128,11 @@ public final class HIRGen {
         int v = counter-1;
 
         BuiltinType type = reg.get(v);
-        if (isNotInferredAndVarRefAndNot(var.varType, reg.get(v))) {
+        if (isNotInferredAndVarRefAndNot(var.varType, type)) {
             type = handleVarTypeNotTyped(var.varType, v);
+        }
+        else {
+            type = ((Variable)symbolTable.get(SymbolType.var).get(source.substring(var.startIdx, var.endIdx))).type;
         }
         sb.append("store ").append(source, var.startIdx, var.endIdx).append(' ').append(byType(type)).append(" t").append(counter-1).append('\n');
         vars.put(source.substring(var.startIdx, var.endIdx), type);

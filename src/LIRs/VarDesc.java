@@ -9,4 +9,8 @@ public class VarDesc {
         type = t;
         value = v;
     }
+    @Override
+    public String toString() {
+        return String.format("{type: %s, value: %s}", type, value);
+    }
 }

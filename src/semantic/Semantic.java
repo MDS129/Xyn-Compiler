@@ -31,7 +31,7 @@ public final class Semantic {
     private BuiltinType getType(AstNode v) {
         return (v instanceof BinaryExpr b) ? getType(b.left) : (v instanceof VarRef var) ?
                 (
-                        (Variable)global.symbolTable.get(SymbolType.var).get("a")
+                        (Variable)global.symbolTable.get(SymbolType.var).get(ErrorEngine.source.substring(var.startIdx, var.endIdx))
                 ).type
                 :
                 ((Expr)v).type;
@@ -221,14 +221,12 @@ public final class Semantic {
             return;
         }
         // if not inferred, not an integer nor float
-        if (var.varType != type) {
-            ErrorEngine.addWithValue("Declaration Error: Cannot assign variable name `%s` with expected value type are %s, but got value type %s instead.",
-                    var.line, var.value.startIdx, var.value.endIdx,
-                    ErrorEngine.source.substring(var.startIdx, var.endIdx),
-                    var.varType,
-                    type
-                );
-        }
+        ErrorEngine.addWithValue("Declaration Error: Cannot assign variable name `%s` with expected value type are %s, but got value type %s instead.",
+                var.line, var.value.startIdx, var.value.endIdx,
+                ErrorEngine.source.substring(var.startIdx, var.endIdx),
+                var.varType,
+                type
+        );
     }
 
     public void check() {

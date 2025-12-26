@@ -350,12 +350,10 @@ public final class HIRPass {
         int i = 1;
         while (true) {
             sb = new StringBuilder();
-
+            IO.println("- Pass " + i++ + ":");
             while (hasImprovement) {
 
                 hasImprovement = false;
-                IO.println("- Pass " + i++ + ":");
-                IO.println(sb.toString());
 
                 if (idx >= chars.length) break;
 
@@ -382,8 +380,8 @@ public final class HIRPass {
                 IO.println("None left.");
                 break;
             } else {
+                IO.println(sb.toString());
                 chars = sb.toString().toCharArray();
-
                 hasImprovement = true;
                 idx = 0;
                 reg.clear();

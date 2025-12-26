@@ -34,6 +34,7 @@ public final class LIRGen {
             sb.append("push_").append(c).append(' ').append(varDesc.value).append('\n');
             sb.append("store_").append(c).append(' ').append(k).append('\n');
         }
+
         return sb.toString();
     }
 }
